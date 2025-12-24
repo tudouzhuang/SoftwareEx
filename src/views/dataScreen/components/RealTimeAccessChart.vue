@@ -1,7 +1,6 @@
 <template>
-  <!-- 实时访问 -->
   <div class="actual-total">
-    <div class="expect-total">可预约总量<i>999999</i>人</div>
+    <div class="expect-total">注册学籍总数<i>30000</i>人</div>
     <div class="actual-total">
       <div v-for="(item, index) in actualTotal.split('')" :key="index" class="actual-item">
         {{ item }}
@@ -19,11 +18,13 @@ import { ref } from "vue";
 import { ECOption } from "@/components/ECharts/config";
 import ECharts from "@/components/ECharts/index.vue";
 
-const actualTotal = ref("216908");
+// 修改这里：实时在线人数 (更真实的数字)
+const actualTotal = ref("02208");
+
 const option = {
   title: [
     {
-      text: (0.5 * 100).toFixed(0) + "%",
+      text: (0.51 * 100).toFixed(0) + "%", // 修改这里：计算出的百分比
       left: "49%",
       top: "35%",
       textAlign: "center",
@@ -40,7 +41,7 @@ const option = {
       }
     },
     {
-      text: "预约量",
+      text: "在线率", // 修改这里：预约量 -> 在线率
       left: "49%",
       top: "25%",
       textAlign: "center",
@@ -104,7 +105,7 @@ const option = {
       radius: "70%",
       z: 2,
       center: ["50%", "50%"],
-      data: [0.4, 0.4, 0.4],
+      data: [0.51, 0.51, 0.51], // 修改这里：水位高度 0.51 (51%)
       itemStyle: {
         color: {
           type: "linear",

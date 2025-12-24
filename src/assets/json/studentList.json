@@ -1,0 +1,71 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": {
+      "list": [
+        {
+          "id": "1",
+          "username": "彭经纬",
+          "gender": 1,
+          "user": { "detail": { "age": 21 } },
+          "idCard": "E12314118",
+          "email": "peng@univ.edu.cn",
+          "address": "计算机科学与技术",
+          "createTime": "2023-09-01 08:00:00",
+          "status": 1,
+          "avatar": ""
+        },
+        {
+          "id": "2",
+          "username": "刘孝贤",
+          "gender": 2,
+          "user": { "detail": { "age": 20 } },
+          "idCard": "E12314058",
+          "email": "liu@univ.edu.cn",
+          "address": "计算机科学与技术",
+          "createTime": "2023-09-01 09:30:00",
+          "status": 1,
+          "avatar": ""
+        },
+        {
+          "id": "3",
+          "username": "黄文斌",
+          "gender": 1,
+          "user": { "detail": { "age": 22 } },
+          "idCard": "E12314138",
+          "email": "huang@univ.edu.cn",
+          "address": "计算机科学与技术",
+          "createTime": "2022-09-01 10:00:00",
+          "status": 1,
+          "avatar": ""
+        },
+        {
+          "id": "4",
+          "username": "陶启勋",
+          "gender": 2,
+          "user": { "detail": { "age": 19 } },
+          "idCard": "E12314154",
+          "email": "tao@univ.edu.cn",
+          "address": "计算机科学与技术",
+          "createTime": "2024-09-01 11:00:00",
+          "status": 0,
+          "avatar": ""
+        },
+        {
+          "id": "5",
+          "username": "徐子昂",
+          "gender": 1,
+          "user": { "detail": { "age": 23 } },
+          "idCard": "E12314122",
+          "email": "xu@univ.edu.cn",
+          "address": "计算机科学与技术",
+          "createTime": "2021-09-01 14:20:00",
+          "status": 1,
+          "avatar": ""
+        }
+      ],
+      "total": 5,
+      "pageNum": 1,
+      "pageSize": 10
+    }
+  }

@@ -1,0 +1,38 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": {
+      "list": [
+        {
+          "id": "1",
+          "username": "admin",
+          "realName": "超级管理员",
+          "role": "管理员",
+          "department": "技术部",
+          "email": "admin@geeker.com",
+          "status": 1,
+          "createTime": "2023-01-01 12:00:00"
+        },
+        {
+          "id": "2",
+          "username": "editor",
+          "realName": "内容编辑",
+          "role": "普通用户",
+          "department": "运营部",
+          "email": "editor@geeker.com",
+          "status": 1,
+          "createTime": "2023-02-15 09:30:00"
+        },
+        {
+          "id": "3",
+          "username": "guest",
+          "realName": "访客",
+          "role": "访客",
+          "department": "市场部",
+          "email": "guest@geeker.com",
+          "status": 0,
+          "createTime": "2023-05-20 14:00:00"
+        }
+      ]
+    }
+  }

@@ -1,5 +1,4 @@
 <template>
-  <!-- 未来30天访问量趋势预测图 -->
   <div class="echarts">
     <ECharts :option="option" :resize="false" />
   </div>
@@ -11,10 +10,11 @@ import ECharts from "@/components/ECharts/index.vue";
 import { ECOption } from "@/components/ECharts/config";
 import { randomNum } from "@/utils";
 
+// 修改这里：生成最近30天的日期 (从30天前 -> 今天)
 const initDate = (): string[] => {
   const dateList: string[] = [];
-  let startDate = dayjs();
-  const endDate = startDate.add(30, "day");
+  let startDate = dayjs().subtract(30, "day");
+  const endDate = dayjs();
   while (startDate.isBefore(endDate)) {
     const month = startDate.format("MM");
     const day = startDate.format("DD");
@@ -25,9 +25,10 @@ const initDate = (): string[] => {
 };
 
 const data = {
-  unit: ["访问量"],
+  unit: ["出勤率"],
   data: new Array(31).fill("").map(val => {
-    val = randomNum(1, 200000);
+    // 修改这里：生成 85 - 100 之间的随机出勤率
+    val = randomNum(85, 100);
     return val;
   })
 };
@@ -38,8 +39,9 @@ const option: ECOption = {
     confine: true,
     formatter: params => {
       let tipData = (params as { name: string; value: string }[])[0];
+      // 修改这里：提示框内容
       let html = `<div class="line-chart-bg">
-                        <span style="">${tipData.name} <i >${tipData.value}</i> 人次访问</span>
+                        <span style="">${tipData.name} <i >${tipData.value}%</i> 出勤率</span>
                     </div>`;
       return html;
     },
@@ -83,13 +85,16 @@ const option: ECOption = {
   ],
   yAxis: data.unit.map((_val: string, index: number) => {
     return {
-      name: "(访问量)",
+      name: "(出勤率)", // 修改这里：坐标轴名称
       nameTextStyle: {
         color: "#7ec7ff",
         fontSize: 12,
         padding: [0, 30, -4, 0]
       },
       minInterval: 1,
+      // 修改这里：固定最大值100，最小80，让曲线波动更好看
+      max: 100,
+      min: 80,
       splitLine: {
         show: false,
         lineStyle: {
@@ -106,11 +111,9 @@ const option: ECOption = {
         show: true,
         color: "#7ec7ff",
         padding: 0,
+        // 修改这里：加上百分号
         formatter: function (value: string) {
-          if (Number(value) >= 10000) {
-            value = Number(value) / 10000 + "w";
-          }
-          return value;
+          return value + "%";
         }
       },
       axisTick: {

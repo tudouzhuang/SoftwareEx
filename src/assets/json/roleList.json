@@ -1,0 +1,40 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": {
+      "list": [
+        {
+          "id": "1",
+          "roleName": "超级管理员",
+          "roleValue": "admin",
+          "status": 1,
+          "remark": "拥有系统所有权限",
+          "createTime": "2023-01-01 10:00:00"
+        },
+        {
+          "id": "2",
+          "roleName": "系统管理员",
+          "roleValue": "system",
+          "status": 1,
+          "remark": "负责系统基础配置",
+          "createTime": "2023-02-15 14:20:00"
+        },
+        {
+          "id": "3",
+          "roleName": "普通用户",
+          "roleValue": "common",
+          "status": 1,
+          "remark": "仅拥有基本查看权限",
+          "createTime": "2023-03-10 09:00:00"
+        },
+        {
+          "id": "4",
+          "roleName": "访客",
+          "roleValue": "guest",
+          "status": 0,
+          "remark": "只能查看部分公开数据",
+          "createTime": "2023-05-20 16:30:00"
+        }
+      ]
+    }
+  }

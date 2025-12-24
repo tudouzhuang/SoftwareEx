@@ -1,5 +1,4 @@
 <template>
-  <!-- 年度使用 -->
   <div class="echarts">
     <ECharts :option="option" :resize="false" />
   </div>
@@ -15,25 +14,28 @@ interface ChartProp {
 }
 
 const gradientColors = ["rgba(254, 219, 101,0.1)", "rgba(0, 122, 254,0.1)", "rgba(255, 75, 122, 0.1)"];
+
+// 修改这里：模拟各科平均分数据 (60-100之间)
 const annualData = [
   {
-    label: new Date().getFullYear() - 2 + "年",
-    value: ["184", "90", "120", "0", "30", "100", "80", "40", "20", "510", "350", "180"]
+    label: new Date().getFullYear() - 2 + "届",
+    value: ["78", "82", "85", "70", "75", "88", "90", "85", "80", "72", "85", "92"]
   },
   {
-    label: new Date().getFullYear() - 1 + "年",
-    value: ["118", "509", "366", "162", "380", "123", "321", "158", "352", "474", "154", "22"]
+    label: new Date().getFullYear() - 1 + "届",
+    value: ["85", "88", "80", "75", "82", "90", "92", "88", "85", "78", "88", "95"]
   },
   {
-    label: new Date().getFullYear() + "年",
-    value: ["548", "259", "113", "90", "69", "512", "23", "49", "28", "420", "313", "156"]
+    label: new Date().getFullYear() + "届",
+    value: ["90", "92", "88", "85", "88", "95", "96", "92", "88", "85", "90", "98"]
   }
 ];
 
 const data = {
   data: annualData,
   unit: annualData.map(val => val.label),
-  columns: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+  // 修改这里：X轴改为科目名称
+  columns: ["C语言", "Java", "Python", "Web", "数据库", "算法", "OS", "网络", "AI", "高数", "英语", "体育"],
   colors: ["#FFA600", "#007AFE", "#FF4B7A"]
 };
 
@@ -53,13 +55,14 @@ const option: ECOption = {
           <div class="year-item">
             <span class="year-dot" style="background-color: ${val.color};"></span>
             <span class="year-name">${val.seriesName}</span>
-            <span class="year-value">${val.data >= 10000 ? (val.data / 10000).toFixed(2) + "w" : val.data}</span>
+            <span class="year-value">${val.data} 分</span>
           </div>
           `;
       });
+      // 修改这里：显示科目名称 params[0].name
       const dom = `
                     <div class="annual-tooltip">
-                      <span class="annual-month">${params[0].dataIndex + 1}月</span>
+                      <span class="annual-month">${params[0].name}</span>
                       <div class="annual-list">
                         ${str}
                       </div>
@@ -88,7 +91,7 @@ const option: ECOption = {
   },
   xAxis: [
     {
-      name: "(月份)",
+      name: "(科目)", // 修改这里
       type: "category",
       boundaryGap: false,
       axisLine: {
@@ -118,7 +121,7 @@ const option: ECOption = {
     }
   ],
   yAxis: {
-    name: "(人数)",
+    name: "(平均分)", // 修改这里
     nameTextStyle: {
       color: "#D6DFEA",
       fontSize: 12,

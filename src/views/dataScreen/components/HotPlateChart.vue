@@ -1,9 +1,8 @@
 <template>
-  <!-- 热门板块 -->
   <div class="echarts-header">
     <span>排名</span>
-    <span>景区</span>
-    <span>预约数量</span>
+    <span>课程名称</span>
+    <span>选课人数</span>
   </div>
   <div class="echarts">
     <ECharts :option="option" :resize="false" />
@@ -22,36 +21,37 @@ interface ChartProp {
   maxValue: number;
 }
 
+// 修改这里：改为热门选修课数据
 const data = [
   {
-    value: 79999,
-    name: "峨眉山",
-    percentage: "80%",
-    maxValue: 100000
+    value: 485,
+    name: "Python程序设计",
+    percentage: "97%",
+    maxValue: 500
   },
   {
-    value: 59999,
-    name: "稻城亚丁",
-    percentage: "60%",
-    maxValue: 100000
+    value: 420,
+    name: "西方艺术鉴赏",
+    percentage: "84%",
+    maxValue: 500
   },
   {
-    value: 49999,
-    name: "九寨沟",
-    percentage: "50%",
-    maxValue: 100000
+    value: 380,
+    name: "大学生心理健康",
+    percentage: "76%",
+    maxValue: 500
   },
   {
-    value: 39999,
-    name: "万里长城",
-    percentage: "40%",
-    maxValue: 100000
+    value: 350,
+    name: "商务英语口语",
+    percentage: "70%",
+    maxValue: 500
   },
   {
-    value: 29999,
-    name: "北京故宫",
-    percentage: "30%",
-    maxValue: 100000
+    value: 310,
+    name: "大数据导论",
+    percentage: "62%",
+    maxValue: 500
   }
 ];
 
@@ -167,7 +167,7 @@ const option: ECOption = {
         color: "#fff",
         margin: 20,
         formatter: (value: number) => {
-          return value >= 10000 ? (value / 10000).toFixed(2) + "w" : value + "";
+          return value + "人";
         }
       },
       axisLine: {

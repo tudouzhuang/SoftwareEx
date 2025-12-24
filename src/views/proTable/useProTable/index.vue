@@ -13,7 +13,6 @@
         <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="openDrawer('新增')">新增用户</el-button>
         <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain @click="batchAdd">批量添加用户</el-button>
         <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile">导出用户数据</el-button>
-        <el-button type="primary" plain @click="toDetail">To 子集详情页面</el-button>
         <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected" @click="batchDelete(scope.selectedListIds)">
           批量删除用户
         </el-button>
@@ -49,7 +48,6 @@
 
 <script setup lang="tsx" name="useProTable">
 import { ref, reactive } from "vue";
-import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { useHandleData } from "@/hooks/useHandleData";
 import { useDownload } from "@/hooks/useDownload";
@@ -72,14 +70,6 @@ import {
   getUserStatus,
   getUserGender
 } from "@/api/modules/user";
-
-const router = useRouter();
-
-// 跳转详情页
-const toDetail = () => {
-  router.push(`/proTable/useProTable/detail/${Math.random().toFixed(3)}?params=detail-page`);
-};
-
 // ProTable 实例
 const proTable = ref<ProTableInstance>();
 

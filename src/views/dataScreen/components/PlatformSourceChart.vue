@@ -1,5 +1,4 @@
 <template>
-  <!-- 平台来源 -->
   <div class="echarts">
     <ECharts :option="option" :resize="false" />
   </div>
@@ -15,11 +14,12 @@ interface ChartProp {
   percentage: string;
 }
 
+// 修改这里：改为访问终端数据
 const data = [
-  { value: 40, name: "智慧文旅平台", percentage: "40%" },
-  { value: 10, name: "携程", percentage: "10%" },
-  { value: 20, name: "飞猪", percentage: "20%" },
-  { value: 30, name: "其他渠道", percentage: "30%" }
+  { value: 40, name: "教务系统Web端", percentage: "40%" },
+  { value: 20, name: "校园APP", percentage: "20%" },
+  { value: 10, name: "微信小程序", percentage: "10%" },
+  { value: 30, name: "自助终端机", percentage: "30%" }
 ];
 
 const option: ECOption = {
@@ -31,7 +31,7 @@ const option: ECOption = {
   },
   tooltip: {
     trigger: "item",
-    formatter: "{b} :  {c}人"
+    formatter: "{b} :  {c}%" // 修改这里：单位改为百分比
   },
   legend: {
     show: true,
@@ -74,6 +74,7 @@ const option: ECOption = {
         show: false
       }
     },
+    // 以下是装饰性环图，保持不变即可
     {
       type: "pie",
       radius: ["20%", "28%"],

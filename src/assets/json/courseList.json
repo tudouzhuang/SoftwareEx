@@ -1,0 +1,58 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": {
+      "list": [
+        {
+          "id": "1001",
+          "courseName": "Java程序设计",
+          "teacher": "王建国",
+          "credits": 4,
+          "maxStudents": 60,
+          "location": "A301",
+          "time": "周一 1-2节",
+          "status": 1
+        },
+        {
+          "id": "1002",
+          "courseName": "高等数学(上)",
+          "teacher": "苏步青",
+          "credits": 5,
+          "maxStudents": 120,
+          "location": "B105阶梯教室",
+          "time": "周二 3-4节",
+          "status": 1
+        },
+        {
+          "id": "1003",
+          "courseName": "大学英语III",
+          "teacher": "李雷",
+          "credits": 2,
+          "maxStudents": 45,
+          "location": "C204",
+          "time": "周三 5-6节",
+          "status": 1
+        },
+        {
+          "id": "1004",
+          "courseName": "数据结构与算法",
+          "teacher": "严蔚敏",
+          "credits": 4,
+          "maxStudents": 80,
+          "location": "A402",
+          "time": "周四 1-2节",
+          "status": 1
+        },
+        {
+          "id": "1005",
+          "courseName": "计算机网络",
+          "teacher": "谢希仁",
+          "credits": 3,
+          "maxStudents": 60,
+          "location": "A305",
+          "time": "周五 3-4节",
+          "status": 0
+        }
+      ]
+    }
+  }
