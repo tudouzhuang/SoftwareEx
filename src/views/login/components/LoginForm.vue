@@ -11,10 +11,21 @@
       <h2 class="tech-title">SYSTEM ACCESS</h2>
 
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large" class="tech-form">
-        <el-form-item prop="username">
-          <el-input v-model="loginForm.username" placeholder="ACCESS ID / ADMIN" class="tech-input">
+        <el-form-item prop="role">
+          <el-select v-model="loginForm.role" placeholder="IDENTITY / 身份选择" class="tech-input" popper-class="tech-dropdown">
             <template #prefix>
-              <el-icon class="el-input__icon"><user /></el-icon>
+              <el-icon class="el-input__icon"><Avatar /></el-icon>
+            </template>
+            <el-option label="学生 / Student" value="student" />
+            <el-option label="教师 / Teacher" value="teacher" />
+            <el-option label="管理员 / Admin" value="admin" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item prop="username">
+          <el-input v-model="loginForm.username" placeholder="ACCESS ID / 账号" class="tech-input">
+            <template #prefix>
+              <el-icon class="el-input__icon"><User /></el-icon>
             </template>
           </el-input>
         </el-form-item>
@@ -23,13 +34,13 @@
           <el-input
             v-model="loginForm.password"
             type="password"
-            placeholder="ACCESS CODE"
+            placeholder="ACCESS CODE / 密码"
             show-password
             autocomplete="new-password"
             class="tech-input"
           >
             <template #prefix>
-              <el-icon class="el-input__icon"><lock /></el-icon>
+              <el-icon class="el-input__icon"><Lock /></el-icon>
             </template>
           </el-input>
         </el-form-item>
@@ -59,14 +70,14 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { HOME_URL } from "@/config";
-import { Login } from "@/api/interface";
 import { ElNotification } from "element-plus";
 import { loginApi } from "@/api/modules/login";
 import { useUserStore } from "@/stores/modules/user";
 import { useTabsStore } from "@/stores/modules/tabs";
 import { useKeepAliveStore } from "@/stores/modules/keepAlive";
 import { initDynamicRouter } from "@/routers/modules/dynamicRouter";
-import { CircleClose, UserFilled } from "@element-plus/icons-vue";
+// 引入 Avatar 图标
+import { CircleClose, UserFilled, User, Lock, Avatar } from "@element-plus/icons-vue";
 import type { ElForm } from "element-plus";
 import md5 from "md5";
 
@@ -78,13 +89,18 @@ const keepAliveStore = useKeepAliveStore();
 
 type FormInstance = InstanceType<typeof ElForm>;
 const loginFormRef = ref<FormInstance>();
+
+// 这里的校验规则增加了 role
 const loginRules = reactive({
+  role: [{ required: true, message: "请选择登录身份", trigger: "change" }],
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }]
 });
 
 const loading = ref(false);
-const loginForm = reactive<Login.ReqLoginForm>({
+// 数据增加了 role
+const loginForm = reactive({
+  role: "", // 默认为空
   username: "",
   password: ""
 });
@@ -96,16 +112,21 @@ const login = (formEl: FormInstance | undefined) => {
     if (!valid) return;
     loading.value = true;
     try {
-      const { data } = await loginApi({ ...loginForm, password: md5(loginForm.password) });
+      // 注意：这里虽然前端选择了 role，但后端接口如果不接收 role 参数，传过去也没事，或者你可以只传 username/password
+      const { data } = await loginApi({ ...loginForm, password: md5(loginForm.password) } as any);
       userStore.setToken(data.access_token);
       await initDynamicRouter();
       tabsStore.setTabs([]);
       keepAliveStore.setKeepAliveName([]);
       router.push(HOME_URL);
+
+      // 根据选择的角色提示不同的信息（纯前端视觉欺骗）
+      const roleName = loginForm.role === "admin" ? "管理员" : loginForm.role === "teacher" ? "教师" : "学生";
+
       ElNotification({
         title: "智慧教务系统",
         dangerouslyUseHTMLString: true,
-        message: "系统连接成功<br/>System Connected...",
+        message: `身份验证通过: <strong style="color: #00f3ff">${roleName}</strong><br/>System Connected...`,
         type: "success",
         duration: 3000,
         customClass: "tech-notification"
@@ -126,7 +147,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
 // ------------------- 特效逻辑开始 (Canvas 粒子动画) -------------------
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 let animationFrameId: number;
-// 定义一个变量存 resize 函数的引用，为了解决 ESLint 报错和内存泄漏
 let resizeHandler: (() => void) | null = null;
 
 const initCanvas = () => {
@@ -136,22 +156,19 @@ const initCanvas = () => {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  // 设置全屏
   const resize = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   };
 
-  // 保存引用并监听
   resizeHandler = resize;
   window.addEventListener("resize", resizeHandler);
 
   resize();
 
-  // 粒子配置
   const particles: any[] = [];
-  const particleCount = 80; // 粒子数量
-  const connectionDistance = 150; // 连线距离
+  const particleCount = 80;
+  const connectionDistance = 150;
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
@@ -165,28 +182,22 @@ const initCanvas = () => {
 
   const animate = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 绘制背景网格
     ctx.strokeStyle = "rgba(0, 243, 255, 0.05)";
     ctx.lineWidth = 1;
 
-    // 更新和绘制粒子
     for (let i = 0; i < particles.length; i++) {
       let p = particles[i];
       p.x += p.vx;
       p.y += p.vy;
 
-      // 边界反弹
       if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
       if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-      // 画粒子
       ctx.fillStyle = "#00f3ff";
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fill();
 
-      // 画连线
       for (let j = i + 1; j < particles.length; j++) {
         let p2 = particles[j];
         let dx = p.x - p2.x;
@@ -209,10 +220,7 @@ const initCanvas = () => {
 // ------------------- 特效逻辑结束 -------------------
 
 onMounted(() => {
-  // 启动 Canvas
   initCanvas();
-
-  // 监听 enter
   document.onkeydown = (e: KeyboardEvent) => {
     if (e.code === "Enter" || e.code === "enter" || e.code === "NumpadEnter") {
       if (loading.value) return;
@@ -224,7 +232,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.onkeydown = null;
   cancelAnimationFrame(animationFrameId);
-  // 修复：使用保存的引用来移除监听器
   if (resizeHandler) {
     window.removeEventListener("resize", resizeHandler);
   }
@@ -233,9 +240,9 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 /* 核心变量 */
-$tech-color: #00f3ff; /* 青色霓虹 */
-$tech-bg: #0a0a0a; /* 深黑背景 */
-$tech-glass: rgba(10, 20, 30, 0.7); /* 毛玻璃背景 */
+$tech-color: #00f3ff;
+$tech-bg: #0a0a0a;
+$tech-glass: rgba(10, 20, 30, 0.7);
 
 .login-wrapper {
   position: relative;
@@ -255,7 +262,6 @@ $tech-glass: rgba(10, 20, 30, 0.7); /* 毛玻璃背景 */
   z-index: 0;
 }
 
-/* 科技感登录框 */
 .login-box-tech {
   position: relative;
   z-index: 10;
@@ -267,7 +273,6 @@ $tech-glass: rgba(10, 20, 30, 0.7); /* 毛玻璃背景 */
   box-shadow: 0 0 30px rgba($tech-color, 0.1);
   border-radius: 4px;
 
-  /* 扫描线动画效果 */
   &::before {
     content: "";
     position: absolute;
@@ -285,7 +290,7 @@ $tech-glass: rgba(10, 20, 30, 0.7); /* 毛玻璃背景 */
 .tech-title {
   text-align: center;
   color: $tech-color;
-  font-family: "Courier New", Courier, monospace; /* 等宽字体增加代码感 */
+  font-family: "Courier New", Courier, monospace;
   font-size: 24px;
   letter-spacing: 4px;
   margin-bottom: 30px;
@@ -332,23 +337,28 @@ $tech-glass: rgba(10, 20, 30, 0.7); /* 毛玻璃背景 */
   box-shadow: 0 0 15px $tech-color;
 }
 
-/* 深度定制 Element Plus Input */
+/* 深度定制 Element Plus Input 和 Select */
 :deep(.tech-input) {
-  .el-input__wrapper {
+  /* 针对 Input 和 Select 的外层包装容器 */
+  .el-input__wrapper,
+  .el-select__wrapper {
     background-color: rgba(0, 0, 0, 0.5) !important;
     box-shadow: none !important;
     border: 1px solid rgba($tech-color, 0.3);
-    border-radius: 0; /* 硬朗直角 */
+    border-radius: 0;
     padding: 10px;
     transition: all 0.3s;
+    width: 100%;
 
     &:hover,
-    &.is-focus {
+    &.is-focus,
+    &.is-focused {
       border-color: $tech-color;
       box-shadow: 0 0 15px rgba($tech-color, 0.3) !important;
     }
   }
 
+  /* 输入框文字 */
   .el-input__inner {
     color: white;
     font-family: "Courier New", monospace;
@@ -357,8 +367,10 @@ $tech-glass: rgba(10, 20, 30, 0.7); /* 毛玻璃背景 */
     }
   }
 
-  .el-input__icon {
-    color: $tech-color;
+  /* 图标颜色 */
+  .el-input__icon,
+  .el-select__caret {
+    color: $tech-color !important;
   }
 }
 
@@ -369,7 +381,6 @@ $tech-glass: rgba(10, 20, 30, 0.7); /* 毛玻璃背景 */
   margin-top: 30px;
 }
 
-/* 按钮样式 */
 .tech-btn-login {
   width: 48%;
   background: rgba($tech-color, 0.2);
@@ -398,6 +409,44 @@ $tech-glass: rgba(10, 20, 30, 0.7); /* 毛玻璃背景 */
   &:hover {
     border-color: white;
     color: white;
+  }
+}
+</style>
+
+<style lang="scss">
+.tech-dropdown {
+  background-color: rgba(10, 20, 30, 0.95) !important;
+  border: 1px solid #00f3ff !important;
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.2) !important;
+
+  .el-select-dropdown__item {
+    color: rgba(255, 255, 255, 0.7);
+    font-family: "Courier New", monospace;
+
+    &.hover,
+    &:hover {
+      background-color: rgba(0, 243, 255, 0.2);
+      color: #00f3ff;
+    }
+
+    &.selected {
+      color: #00f3ff;
+      font-weight: bold;
+      background-color: transparent;
+
+      &::after {
+        content: "<";
+        position: absolute;
+        right: 10px;
+      }
+    }
+  }
+
+  /* 隐藏箭头 */
+  .el-popper__arrow::before {
+    background-color: #00f3ff !important;
+    border: 1px solid #00f3ff !important;
+    display: none; /* 科技风通常不要小三角，直接去掉更简洁 */
   }
 }
 </style>

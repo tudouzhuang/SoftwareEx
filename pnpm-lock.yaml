@@ -53,6 +53,9 @@ importers:
       pinia-plugin-persistedstate:
         specifier: ^3.2.1
         version: 3.2.3(pinia@2.3.1(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3)))
+      pnpm:
+        specifier: ^10.26.2
+        version: 10.26.2
       qs:
         specifier: ^6.12.1
         version: 6.14.0
@@ -4067,6 +4070,11 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  pnpm@10.26.2:
+    resolution: {integrity: sha512-DjCP8gBfx0EDZvFU9iX2YxqysWsdLnAjhETdaunWMKhILZKkURRN68SSQWiW7Rb3sRSobsaLhASyRDhp5o/9pg==}
+    engines: {node: '>=18.12'}
+    hasBin: true
 
   portfinder@1.0.38:
     resolution: {integrity: sha512-rEwq/ZHlJIKw++XtLAO8PPuOQA/zaPJOZJ37BVuN97nLpMJeuDVLVGRwbFoBgLudgdTMP2hdRJP++H+8QOA3vg==}
@@ -9550,6 +9558,8 @@ snapshots:
       typescript: 5.9.3
     transitivePeerDependencies:
       - '@vue/composition-api'
+
+  pnpm@10.26.2: {}
 
   portfinder@1.0.38:
     dependencies:
